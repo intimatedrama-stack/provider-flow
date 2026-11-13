@@ -23,10 +23,17 @@ export function DateOverrides({
     // Cast to any to bypass typed client RLS inference (Insert resolves to never)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const db = supabase as any;
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Your session has expired");
+      return;
+    }
     const { data, error } = await db
       .from("availability_overrides")
       .upsert(
-        { date, is_available: available, note: note || null },
+        { provider_id: user.id, date, is_available: available, note: note || null },
         { onConflict: "date" }
       )
       .select()

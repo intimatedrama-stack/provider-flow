@@ -4,6 +4,7 @@ export type SubmissionStatus = "pending" | "approved" | "rejected";
 export interface Client {
   id: string;
   created_at: string;
+  provider_id: string;
   name: string;
   phone: string | null;
   city: string | null;
@@ -25,6 +26,7 @@ export interface ScreeningQuestion {
 export interface ScreeningSubmission {
   id: string;
   created_at: string;
+  provider_id: string;
   client_id: string | null;
   answers: Record<string, string>;
   status: SubmissionStatus;
@@ -34,6 +36,7 @@ export interface ScreeningSubmission {
 export interface Post {
   id: string;
   created_at: string;
+  provider_id: string;
   ad: string;
   city: string | null;
   views: number;
@@ -42,6 +45,7 @@ export interface Post {
 
 export interface AvailabilitySchedule {
   id: string;
+  provider_id: string;
   day_of_week: number;
   start_time: string;
   end_time: string;
@@ -50,6 +54,7 @@ export interface AvailabilitySchedule {
 
 export interface AvailabilityOverride {
   id: string;
+  provider_id: string;
   date: string;
   is_available: boolean;
   note: string | null;
