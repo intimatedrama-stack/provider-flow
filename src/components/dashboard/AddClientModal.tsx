@@ -37,7 +37,15 @@ export function AddClientModal() {
     if (!form.name) return;
     const { supabase } = await import("@/lib/supabase");
     const db = supabase as any;
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Your session has expired");
+      return;
+    }
     const { error } = await db.from("clients").insert({
+      provider_id: user.id,
       name: form.name,
       phone: form.phone || null,
       city: form.city || null,

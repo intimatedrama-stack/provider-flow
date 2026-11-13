@@ -48,6 +48,13 @@ export function WeeklySchedule({
     // Delete all existing, re-insert (cast to any to bypass typed client RLS inference)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const db = supabase as any;
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Your session has expired");
+      return;
+    }
     await db
       .from("availability_schedule")
       .delete()
@@ -56,6 +63,7 @@ export function WeeklySchedule({
     const inserts = rows
       .filter((r) => r.is_available)
       .map(({ day_of_week, start_time, end_time, is_available }) => ({
+        provider_id: user.id,
         day_of_week,
         start_time,
         end_time,
